@@ -1,0 +1,38 @@
+services:
+  jenkins:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - my-network
+    environment:
+      JAVA_OPTS: "-Djava.awt.headless=true"
+
+  maven-java:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: maven-java
+    environment:
+      - MAVEN_OPTS=-Xmx2g
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    command: mvn clean install
+    depends_on:
+      - jenkins
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  jenkins_home:
