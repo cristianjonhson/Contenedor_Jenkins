@@ -1,11 +1,13 @@
-# jenkins/Dockerfile
 FROM jenkins/jenkins:lts
 
 USER root
 
-# Instalar OpenJDK 17 y Maven
-RUN apt-get update && \
-    apt-get install -y openjdk-17-jdk openjdk-17-jre maven && \
+# Instalar Docker, OpenJDK 17 y Maven
+RUN apt-get update && apt-get install -y \
+    docker.io \
+    openjdk-17-jdk \
+    openjdk-17-jre \
+    maven && \
     apt-get clean
 
 # Establecer JAVA_HOME
